@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+
+ <!-- Featured Products -->
+
+ <div class="container text-center mt-5">
+    <h1 class="mt-5">Featured Products</h1>
+  </div>
+        
+  <div class="row text-center">
+    {% for product in f_list %}
+    <div class="card mt-3 " style="width: 12rem;">
+        <a href="{% url 'product_details' product.id %}"><img src="{{product.image.url}}" class="card-img-top" class="card-img-top" alt="image"></a>
+        <div class="card-body">
+          <h5 class="card-title">{{product.title}}</h5>
+          <p class="card-text">{{product.description}}</p>
+          <h6>{{product.price}}</h6>
+        </div>
+      </div> 
+      {% endfor %} 
+    </div>    
+        
+   
+    <h2 class="container text-center mt-5">Latest Products</h2>
+    <div class="row text-center">
+        {% for product in l_list %}
+        <div class="card mt-3 " style="width: 12rem;">
+            <a href="{% url 'product_details' product.id %}"><img src="{{product.image.url}}" class="card-img-top" class="card-img-top" alt="image"></a>
+            <div class="card-body">
+              <h5 class="card-title">{{product.title}}</h5>
+              <p class="card-text">{{product.description}}</p>
+              <h6>{{product.price}}</h6>
+            </div>
+          </div> 
+          {% endfor %} 
+        </div>
+        </div>    
+    
+
+
+
+
+{% endblock %}
