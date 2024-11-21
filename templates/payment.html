@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="div container fw-bold mt-5 mb-5">
+    <form action="" method="post">
+        {% csrf_token %} 
+        <div class="text-center mt-5">
+        <img src="{% static '/images/cards.jpg' %}" alt="img">
+    </div>
+    <div data-mdb-input-init class="form-outline mb-4">
+        <label class="form-label">Card Holder Name</label>
+        <input class="form-control" type="text" placeholder="Name" name="cardholdername" required>
+        </div>
+        <div data-mdb-input-init class="form-outline mb-4">
+        <label class="form-label">Credit Card Number</label>
+        <input class="form-control" type="password" placeholder="cardnumer" name="cardnumber" required>
+    </div>
+    <label for="pet-select">Card Type</label>
+    <div>
+    <select  class="w-100" name="chosecard">
+      <option value="">--Please choose an Card--</option>
+      <option value="Vista Card">Vista Card</option>
+      <option value="Master Card">Master Card</option>
+      <option value="Discover Card">Discover Card</option>
+      <option value="American Card">American Card</option>
+    </select>
+    </div>
+        <div data-mdb-input-init class="form-outline mb-4">
+        <label class="form-label">CVV Number</label>
+        <input class="form-control" type="password" name="cvvnumber" required placeholder="cvv Number">
+    </div>
+        <button type="submit" class="btn btn-primary btn-block mb-4 w-100">Pay Now</button>
+    </form>
+</div>
+    
+{% endblock %}

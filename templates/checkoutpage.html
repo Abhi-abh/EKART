@@ -1,14 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load static %}
+
+<div class="container text-center mt-5 mb-5">
 {% if messages %}
         {% for message in messages %}
-            <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+            <p {% if message.tags %} class="{{ message.tags }} mt-5"{% endif %}>
                 {{ message }}
     </p>
         {% endfor %}
 {% else %}
         
-{% include 'checkout.html' %}
 {% endif %}
+<div>
+<a href="{% url 'payment' %}"><button class="bg-danger">Make Payment</button></a>
+</div>
+</div>
 
 {% endblock %}

@@ -1,10 +1,11 @@
 from django.shortcuts import render,redirect
-from .models import Product,Customer,Order,OrededItem
+from .models import Product,Customer,Order,OrededItem,Payment
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,logout
 from django.contrib.auth import login as auth_login
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -26,7 +27,6 @@ def signup(request):
             my_user=User.objects.create_user(uname,email,password)
             my_user.save()
             customer=Customer.objects.create(
-                username=uname,
                 user=my_user,
                 phone=phone,
                 address=address
@@ -59,6 +59,7 @@ def loggout(request):
     logout(request)
     return redirect('login')
 
+@login_required(login_url='login')
 def home(request):
     feature_list = Product.objects.order_by('priority')[:4]
     latest_list = Product.objects.order_by('-id')[:4]
@@ -68,18 +69,17 @@ def home(request):
     }
     return render(request,'index.html',dict_home)
 
+
 def products(request):
     page=1
     if request.GET:
         page=request.GET.get('page',1)
     list = Product.objects.order_by('priority')
-    p = Paginator(list,4)
+    p = Paginator(list,8)
     list = p.get_page(page)
     dict = {'product':list}
     return render(request,'products.html',dict)
 
-def account(request):
-    return render(request,'account.html')
 
 
 def add_to_cart(request):
@@ -90,15 +90,17 @@ def add_to_cart(request):
         product_id=request.POST.get('product_id')
         cart_obj,created=Order.objects.get_or_create(
             owner=customer,
-            order_status=Order.CART_STAGE
+            order_status=Order.CART_STAGE,
+            
         )
         product=Product.objects.get(pk=product_id)
         ordered_item,created=OrededItem.objects.get_or_create(
             product=product,
-            owner=cart_obj
+            owner=cart_obj,
+            
         )
         if created:
-            ordered_item.quantity
+            ordered_item.quantity=ordered_item.quantity+quantity
             ordered_item.save()
         else:
             ordered_item.quantity=ordered_item.quantity+quantity
@@ -111,7 +113,8 @@ def cart(request):
     customer=user.customer_profile
     cart_obj,created=Order.objects.get_or_create(
             owner=customer,
-            order_status=Order.CART_STAGE
+            order_status=Order.CART_STAGE,
+            
         )
     context={'cart':cart_obj}
     return render(request,'cart.html',context)
@@ -134,13 +137,38 @@ def checkout(request):
             )
             if order_obj:
                 order_obj.order_status=Order.ORDER_CONFIRMED
+                order_obj.total_price=total
                 order_obj.save()
-                status_message="your order is confirmed"
+                status_message="Make your payment"
                 messages.success(request,status_message)
             else:
                 status_message="No item found"
                 messages.error(request,status_message)
         except Exception as error:
             status_message="No item found"
-            messages.error(request,status_message)
-    return redirect('checkoutpage')
+            messages.error(request,status_message)   
+    return render(request,'checkoutpage.html')
+
+@login_required(login_url='login')
+def view_orders(request):
+    user=request.user
+    customer=user.customer_profile
+    all_orders=Order.objects.filter(owner=customer).exclude(order_status=Order.CART_STAGE)
+    context={'orders':all_orders}
+    return render(request,'orders.html',context)
+
+def payment(request):
+    if request.method == 'POST':
+        payment_obj = Payment.objects.create(
+        card_name = request.POST.get('cardholdername'),
+        card_number = request.POST.get('cardnumber'),
+        card_type = request.POST.get('chosecard'),
+        cvv_number = request.POST.get('cvvnumber'),
+        )
+        if payment_obj:
+            payment_obj.save()
+            return redirect('confirompage')
+    return render(request,'payment.html')
+
+def confirmpage(request):
+    return render(request,'confirompage.html')

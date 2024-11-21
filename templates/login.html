@@ -1,28 +1,35 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<form method="post">
-    <h3>Login Here</h3>
-    {% csrf_token %}
-    {% if messages %}
-    <div class="messages">
-        {% for message in messages %}
-            <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>
-                {{ message }}
-    </p>
-        {% endfor %}
+<div class="div container fw-bold mb-5">
+    <form method="post">
+        {% csrf_token %}
+        <div class="text-center mt-5">
+        <h1>Login Here</h1>
+    </div>  
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                    {{ message }}
+        </p>
+            {% endfor %}
+        </div>  
+    {% endif %} 
     
-{% endif %} 
+    <div data-mdb-input-init class="form-outline mb-4">
+        <label class="form-label" for="username">Username</label>
+        <input class="form-control" type="text" placeholder="Enter Username" id="username" name="username" required>
+    </div>
+        <div data-mdb-input-init class="form-outline mb-4">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-control" type="password" placeholder="Password" id="password" name="pass" required>
+    </div>
+        <button type="submit" class="btn btn-primary btn-block mb-4 w-100">Log In</button>
+        <div class="container text-center">
+        <a class="text-primary" href="{% url 'signup' %}" >Create new account</a>
+    </div>
+    </form>
 </div>
-    <label for="username">Username</label>
-    <input type="text" placeholder="Enter Username" id="username" name="username" required>
-
-    <label for="password">Password</label>
-    <input type="password" placeholder="Password" id="password" name="pass" required>
-
-    <button type="submit">Log In</button>
-    
-    <a class="text-primary" href="{% url 'signup' %}" >Create a account</a>
-</form>
 
 {% endblock %}

@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<div class="div container fw-bold mb-5">
 <form action="" method="post">
     {% csrf_token %} 
-    <div class="text-center">
+    <div class="text-center mt-5">
     <h1>Signup</h1>
 </div>
 <div class="error">
@@ -15,25 +16,32 @@
     {% endfor %}
      {% endif %}
     </div>
-    <label for="username">Username</label>
 
-    <input type="text" placeholder="Username" name="username" id="username" required>
-
-    <label for="email">Email</label>
-    <input type="email" placeholder="Email or Phone" name="email" id="email" required>
-
-    <label for="password1">Password</label>
-    <input type="password" placeholder="Password" id="password1" name="password1" required>
-
-
-    <label for="adress">Address</label>
-    <input type="text" name="address" required placeholder="adress">
-    
-    <label for="phone">Phone Number</label>
-    <input type="text" name="phone" required placeholder="phone">
-    <button type="submit">Signup</button>
-    
-    <a class="text-primary" href="{% url 'login' %}" >i have already account</a>
+    <div data-mdb-input-init class="form-outline mb-4">
+    <label class="form-label" for="username">Username</label>
+    <input class="form-control" type="text" placeholder="Username" name="username" id="username" required>
+    </div>
+    <div data-mdb-input-init class="form-outline mb-4">
+    <label class="form-label" for="email">Email</label>
+    <input class="form-control" type="email" placeholder="Email or Phone" name="email" id="email" required>
+</div>
+    <div data-mdb-input-init class="form-outline mb-4">
+    <label class="form-label" for="password1">Password</label>
+    <input class="form-control" type="password" placeholder="Password" id="password1" name="password1" required>
+</div>
+    <div data-mdb-input-init class="form-outline mb-4">
+    <label class="form-label" for="adress">Address</label>
+    <input class="form-control" type="text" name="address" required placeholder="Address">
+</div>
+    <div data-mdb-input-init class="form-outline mb-4">
+    <label class="form-label" for="phone">Phone Number</label>
+    <input class="form-control" type="text" name="phone" required placeholder="Phone Number">
+</div>
+    <button type="submit" class="btn btn-primary btn-block mb-4 w-100">Signup</button>
+    <div class="container text-center">
+    <a class="text-primary" href="{% url 'login' %}" >I have already account</a>
+</div>
 </form>
+</div>
 
 {% endblock %}
